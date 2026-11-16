@@ -238,7 +238,7 @@ Os dados ficam no PostgreSQL, no banco `sistema_comercial`. A aplicação só co
 
 ### RNF02 — Proteção da senha
 
-A senha é armazenada como hash SHA-256, sem salt. A comparação no login usa esse mesmo algoritmo.
+A senha é armazenada utilizando o algoritmo criptográfico seguro Bcrypt (com salt gerado via pgcrypto/bcryptjs), prevenindo vulnerabilidades de rainbow tables e colisões. A comparação no login usa esse mesmo algoritmo.
 
 ### RNF03 — Execução
 

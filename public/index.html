@@ -11,7 +11,10 @@
     <header class="topbar">
         <div>
             <h1>Sistema Comercial</h1>
-            <span id="nomeUsuario"></span>
+            <div class="user-info">
+                <span id="nomeUsuario"></span>
+                <span id="badgePerfil" class="badge"></span>
+            </div>
         </div>
 
         <button id="btnSair" class="btn-sair">Sair</button>
@@ -27,47 +30,63 @@
         </nav>
 
         <section id="inicio" class="tela">
-            <h2>Painel inicial</h2>
-            <p>Bem-vindo ao Sistema de Gerenciamento Comercial.</p>
+            <h2>Painel Inicial</h2>
+            <p>Resumo operacional das atividades da loja.</p>
 
+            <div class="indicadores">
+                <div class="card-indicador">
+                    <span class="indicador-titulo">Total de Clientes</span>
+                    <span class="indicador-valor" id="indClientes">...</span>
+                </div>
+                <div class="card-indicador">
+                    <span class="indicador-titulo">Produtos Ativos</span>
+                    <span class="indicador-valor" id="indProdutos">...</span>
+                </div>
+                <div class="card-indicador">
+                    <span class="indicador-titulo">Faturamento do Mês</span>
+                    <span class="indicador-valor" id="indFaturamento">...</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Acesso Rápido</h3>
             <div class="cards">
                 <div class="card">
                     <h3>Clientes</h3>
-                    <p>Gerencie os clientes cadastrados.</p>
+                    <p>Gerencie o cadastro de clientes.</p>
                     <button data-ir="clientes">Acessar</button>
                 </div>
 
                 <div class="card">
                     <h3>Produtos</h3>
-                    <p>Gerencie produtos e estoque.</p>
+                    <p>Gerencie o catálogo de produtos e preços.</p>
                     <button data-ir="produtos">Acessar</button>
                 </div>
 
                 <div class="card">
                     <h3>Pedidos</h3>
-                    <p>Registre e consulte pedidos.</p>
+                    <p>Registre pedidos e acompanhe entregas.</p>
                     <button data-ir="pedidos">Acessar</button>
                 </div>
             </div>
         </section>
 
         <section id="clientes" class="tela escondido">
-            <h2>Gerenciamento de clientes</h2>
+            <h2>Gerenciamento de Clientes</h2>
 
             <form id="formCliente" class="formulario">
                 <input type="hidden" id="idCliente">
 
-                <label>Nome</label>
-                <input type="text" id="clienteNome" required>
+                <label>Nome *</label>
+                <input type="text" id="clienteNome" required placeholder="Nome completo">
 
-                <label>E-mail</label>
-                <input type="email" id="clienteEmail">
+                <label>E-mail *</label>
+                <input type="email" id="clienteEmail" required placeholder="exemplo@email.com">
 
                 <label>Telefone</label>
-                <input type="text" id="clienteTelefone">
+                <input type="text" id="clienteTelefone" placeholder="(00) 00000-0000">
 
-                <label>CPF/CNPJ</label>
-                <input type="text" id="clienteDocumento">
+                <label>CPF / CNPJ * (somente números)</label>
+                <input type="text" id="clienteDocumento" required placeholder="11 dígitos (CPF) ou 14 dígitos (CNPJ)">
 
                 <div class="acoes">
                     <button type="submit">Salvar cliente</button>
@@ -84,6 +103,7 @@
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Telefone</th>
+                            <th>CPF/CNPJ</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -93,22 +113,22 @@
         </section>
 
         <section id="produtos" class="tela escondido">
-            <h2>Gerenciamento de produtos</h2>
+            <h2>Gerenciamento de Produtos</h2>
 
             <form id="formProduto" class="formulario">
                 <input type="hidden" id="idProduto">
 
-                <label>Nome</label>
-                <input type="text" id="produtoNome" required>
+                <label>Nome *</label>
+                <input type="text" id="produtoNome" required placeholder="Nome do produto">
 
                 <label>Descrição</label>
-                <input type="text" id="produtoDescricao">
+                <input type="text" id="produtoDescricao" placeholder="Descrição resumida">
 
-                <label>Preço</label>
-                <input type="number" id="produtoPreco" min="0" step="0.01" required>
+                <label>Preço (R$) * (deve ser maior que zero)</label>
+                <input type="number" id="produtoPreco" min="0.01" step="0.01" required placeholder="0.00">
 
-                <label>Estoque</label>
-                <input type="number" id="produtoEstoque" min="0" step="1" required>
+                <label>Estoque *</label>
+                <input type="number" id="produtoEstoque" step="1" required placeholder="Quantidade">
 
                 <div class="acoes">
                     <button type="submit">Salvar produto</button>
@@ -134,15 +154,15 @@
         </section>
 
         <section id="pedidos" class="tela escondido">
-            <h2>Gerenciamento de pedidos</h2>
+            <h2>Gerenciamento de Pedidos</h2>
 
             <form id="formPedido" class="formulario">
-                <label>Cliente</label>
+                <label>Cliente *</label>
                 <select id="pedidoCliente" required>
                     <option value="">Selecione um cliente</option>
                 </select>
 
-                <h3>Produtos do pedido</h3>
+                <h3>Produtos do Pedido</h3>
 
                 <div class="linha-produto">
                     <select id="pedidoProduto">
@@ -156,7 +176,14 @@
 
                 <ul id="itensSelecionados"></ul>
 
-                <button type="submit">Registrar pedido</button>
+                <div class="resumo-pedido">
+                    <p id="totalPedidoAtual"><strong>Total do Pedido:</strong> R$ 0,00</p>
+                    <small id="alertaPedidoMinimo" style="color: #dc2626;">* O valor total mínimo para registro é de R$ 50,00</small>
+                </div>
+
+                <div class="acoes">
+                    <button type="submit" id="btnSalvarPedido">Registrar Pedido</button>
+                </div>
             </form>
 
             <h3>Pedidos registrados</h3>
@@ -165,7 +192,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Número</th>
+                            <th>Nº</th>
                             <th>Cliente</th>
                             <th>Data</th>
                             <th>Status</th>
